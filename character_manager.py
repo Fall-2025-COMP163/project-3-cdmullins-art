@@ -23,12 +23,27 @@ from custom_exceptions import (
 # ============================================================================
 
 def create_character(name, character_class):
+    if character_class == "Warrior":
+        max_health = 150
+        strength = 20
+    elif character_class == "Mage":
+        max_health = 100
+        strength = 10
+    elif character_class == "Cleric":
+        max_health = 120
+        strength = 15
+    else:
+        max_health = 100  # Default max_health
+        strength = 10  # Default strength
+
     return {
-        'name': name,  
+        'name': character_name,  # Ensure 'name' is included
         'class': character_class,
         'level': 1,
-        'health': 100,
-        'xp': 0,
+        'health': max_health,  # Initialize health and max_health
+        'max_health': max_health,  # Initialize max_health
+        'strength': strength,  # Initialize strength
+        'experience': 0,  # Initialize experience
         'gold': 50,
         'inventory': [],
         'active_quests': [],

@@ -54,16 +54,16 @@ def main_menu():
 def new_game():
      global current_character
     
-    name = input("Enter your character's name: ")
-    character_class = input("Choose your class (Warrior, Mage, Rogue, Cleric): ")
+     name = input("Enter your character's name: ")
+     character_class = input("Choose your class (Warrior, Mage, Rogue, Cleric): ")
     
-    try:
-        current_character = character_manager.create_character(name, character_class)
-        print(f"{current_character.name} the {current_character.character_class} has been created!")
-        game_loop()  # Start the game loop
-    except InvalidCharacterClassError:
-        print(f"Error: '{character_class}' is not a valid class. Please try again.")
-        new_game()
+     try:
+         current_character = character_manager.create_character(name, character_class)
+         print(f"{current_character.name} the {current_character.character_class} has been created!")
+         game_loop()  # Start the game loop
+     except InvalidCharacterClassError:
+         print(f"Error: '{character_class}' is not a valid class. Please try again.")
+         new_game()
 
 
 def load_game():

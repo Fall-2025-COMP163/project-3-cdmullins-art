@@ -153,17 +153,24 @@ def unequip_armor(character):
 # ============================================================================
 
 def purchase_item(character, item_id, item_data):
-    if character['gold'] < item_data[item_id]['cost']:
-        raise InsufficientResourcesError("Not enough gold!")
+    if item_id not in item_data:
+        raise ItemNotFoundError(f"Item {item_id} not found in item data")
+
+    item = item_data[item_id]  # Get the item data from the dictionary
     
+    # Check if the character has enough gold
+    if character['gold'] < item['cost']:
+        raise InsufficientResourcesError("Not enough gold!")
+
+    # Check if the inventory is full
     if len(character['inventory']) >= MAX_INVENTORY_SIZE:
         raise InventoryFullError("Inventory is full!")
-    
-    # Deduct gold and add item to inventory
-    character['gold'] -= item_data[item_id]['cost']
-    add_item_to_inventory(character, item_id)
-    return True
 
+    # Deduct gold and add item to the character's inventory
+    character['gold'] -= item['cost']
+    add_item_to_inventory(character, item_id)
+    
+    return True
 
 def sell_item(character, item_id, item_data):
     if item_id not in character['inventory']:

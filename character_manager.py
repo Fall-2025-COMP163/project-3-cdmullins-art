@@ -106,8 +106,9 @@ def list_saved_characters(save_directory="data/save_games"):
      if not os.path.exists(save_directory):
         return []
     
-    saved_files = os.listdir(save_directory)
-    return [file.split('_save.txt')[0] for file in saved_files if file.endswith('_save.txt')]
+     saved_files = os.listdir(save_directory)
+
+     return [file.split('_save.txt')[0] for file in saved_files if file.endswith('_save.txt')]
 
 def delete_character(character_name, save_directory="data/save_games"):
     save_path = os.path.join(save_directory, f"{character_name}_save.txt")

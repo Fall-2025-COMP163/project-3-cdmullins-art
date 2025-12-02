@@ -149,12 +149,12 @@ def get_quest_completion_percentage(character, quest_data_dict):
     return (completed_quests / total_quests) * 100 if total_quests > 0 else 0
     
 def get_total_quest_rewards_earned(character, quest_data_dict):
-   total_xp = sum(quest_data_dict[quest_id]['reward_xp'] for quest_id in character['completed_quests'] if quest_id in quest_data_dict)
+    total_xp = sum(quest_data_dict[quest_id]['reward_xp'] for quest_id in character['completed_quests'] if quest_id in quest_data_dict)
     total_gold = sum(quest_data_dict[quest_id]['reward_gold'] for quest_id in character['completed_quests'] if quest_id in quest_data_dict)
     return {'total_xp': total_xp, 'total_gold': total_gold}
 
 def get_quests_by_level(quest_data_dict, min_level, max_level):
-  return [quest_data for quest_id, quest_data in quest_data_dict.items() if min_level <= quest_data['required_level'] <= max_level]
+    return [quest_data for quest_id, quest_data in quest_data_dict.items() if min_level <= quest_data['required_level'] <= max_level]
 
 # ============================================================================
 # DISPLAY FUNCTIONS

@@ -22,8 +22,10 @@ from custom_exceptions import (
 # CHARACTER MANAGEMENT FUNCTIONS
 # ============================================================================
 
+# character_manager.py
+
 def create_character(name, character_class):
-    
+   
     if character_class == "Warrior":
         max_health = 150
         strength = 20
@@ -43,21 +45,22 @@ def create_character(name, character_class):
     else:
         raise InvalidCharacterClassError(f"Invalid class: {character_class}")
 
-    
+    # Ensure all required keys are present
     return {
-        "name": character_name,
-        "class": character_class,
-        "level": 1,
-        "health": max_health,
-        "max_health": max_health,
-        "strength": strength,
-        "magic": magic,
-        "experience": 0,
-        "gold": 50,
-        "inventory": [],
-        "active_quests": [],
-        "completed_quests": []
+        "name": name,              # Character name (passed parameter)
+        "class": character_class,  # Character class (passed parameter)
+        "level": 1,                # Default level
+        "health": max_health,      # Set health
+        "max_health": max_health,  # Set max health
+        "strength": strength,      # Set strength
+        "magic": magic,            # Set magic power
+        "experience": 0,           # Set initial experience (this is where KeyError happens)
+        "gold": 50,                # Default gold value
+        "inventory": [],           # Default empty inventory
+        "active_quests": [],       # Default empty active quests
+        "completed_quests": []     # Default empty completed quests
     }
+
 
     
 def save_character(character, save_directory="data/save_games"):

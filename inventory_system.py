@@ -58,7 +58,23 @@ def use_item(character, item_id, item_data):
     if item_id not in character['inventory']:
         raise ItemNotFoundError(f"Item {item_id} not found in inventory")
 
-    # Retrieve the item from the item_data dictionary using the item_id
+    item_data = {
+    "health_potion": {
+        'cost': 25,
+        'type': 'consumable',  # Marked as consumable
+        'effect': 'health:20'  # Effect: increases health by 20
+    },
+    "iron_sword": {
+        'cost': 150,
+        'type': 'weapon',  # Marked as weapon (non-consumable)
+        'effect': 'strength:5'  # Effect: increases strength by 5
+    },
+    "expensive_item": {
+        'cost': 100,
+        'type': 'consumable',  # Marked as consumable
+        'effect': 'health:50'  # Effect: increases health by 50
+    }
+    }
     item = item_data.get(item_id)
     
     if item is None:

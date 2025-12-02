@@ -89,44 +89,54 @@ def save_character(character, save_directory="data/save_games"):
         raise e
 
 def load_character(character_name, save_directory="data/save_games"):
-     save_path = os.path.join(save_directory, f"{character_name}_save.txt")
+    save_path = os.path.join(save_directory, f"{character_name}_save.txt")
 
     if not os.path.exists(save_path):
         raise CharacterNotFoundError(f"Character '{character_name}' not found.")
-    
+
     try:
         character = {}
+
         with open(save_path, 'r') as f:
             lines = f.readlines()
             for line in lines:
-                # Skip empty lines or lines that do not contain ": "
+                # Skip empty lines or malformed lines
                 if ": " not in line or line.strip() == "":
                     continue
 
-                try:
-                    # Split the line into key and value
-                    key, value = line.strip().split(": ", 1)
+                key, value = line.strip().split(": ", 1)
 
-                    # Process specific keys that require special handling (e.g., lists)
-                    if key == "INVENTORY" or key == "ACTIVE_QUESTS" or key == "COMPLETED_QUESTS":
-                        character[key] = value.split(',')
-                    else:
-                        character[key] = value  # Store the value directly
-                except ValueError:
-                    # If splitting fails, skip the line or log an error
-                    print(f"Warning: Malformed line in save file: {line.strip()}")
-                    continue
+                # Process specific keys that require special handling
+                if key == "INVENTORY" or key == "ACTIVE_QUESTS" or key == "COMPLETED_QUESTS":
+                    character[key] = value.split(',')
+                else:
+                    character[key] = value
 
-        # Convert relevant fields to proper types, with defaults if the key is missing
-        character['level'] = int(character.get('level', 1))  # Default to 1 if not found
-        character['health'] = int(character.get('health', 100))  # Default to 100 if not found
-        character['max_health'] = int(character.get('max_health', 100))  # Default to 100 if not found
-        character['strength'] = int(character.get('strength', 5))  # Default to 5 if not found
-        character['magic'] = int(character.get('magic', 5))  # Default to 5 if not found
-        character['experience'] = int(character.get('experience', 0))  # Default to 0 if not found
-        character['gold'] = int(character.get('gold', 50))  # Default to 50 if not found
+        # Ensure that all required keys are in the dictionary
+        character.setdefault('name', 'Unknown')
+        character.setdefault('class', 'Warrior')  # Default to Warrior
+        character.setdefault('level', 1)
+        character.setdefault('health', 100)
+        character.setdefault('max_health', 100)
+        character.setdefault('strength', 10)
+        character.setdefault('magic', 10)
+        character.setdefault('experience', 0)
+        character.setdefault('gold', 50)
+        character.setdefault('inventory', [])
+        character.setdefault('active_quests', [])
+        character.setdefault('completed_quests', [])
+
+        # Convert relevant fields to proper types
+        character['level'] = int(character['level'])
+        character['health'] = int(character['health'])
+        character['max_health'] = int(character['max_health'])
+        character['strength'] = int(character['strength'])
+        character['magic'] = int(character['magic'])
+        character['experience'] = int(character['experience'])
+        character['gold'] = int(character['gold'])
 
         return character
+
     except Exception as e:
         raise SaveFileCorruptedError(f"Error loading file '{character_name}_save.txt': {e}")
         

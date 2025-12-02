@@ -54,7 +54,7 @@ def load_items(filename="data/items.txt"):
     return items
     
 def validate_quest_data(quest_dict):
-     required_fields = ['quest_id', 'title', 'description', 'reward_xp', 'reward_gold', 'required_level', 'prerequisite']
+    required_fields = ['quest_id', 'title', 'description', 'reward_xp', 'reward_gold', 'required_level', 'prerequisite']
     
     for field in required_fields:
         if field not in quest_dict:
@@ -70,7 +70,6 @@ def validate_quest_data(quest_dict):
         raise InvalidDataFormatError(f"Invalid prerequisite value: {quest_dict['prerequisite']}")
     
     return True
-
 def validate_item_data(item_dict):
     required_fields = ['item_id', 'name', 'type', 'effect', 'cost', 'description']
     valid_types = ['weapon', 'armor', 'consumable']

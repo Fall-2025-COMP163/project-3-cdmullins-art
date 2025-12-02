@@ -90,10 +90,10 @@ def get_active_quests(character, quest_data_dict):
 
 def get_completed_quests(character, quest_data_dict):
    completed_quests_data = []
-    for quest_id in character['completed_quests']:
-        if quest_id in quest_data_dict:
-            completed_quests_data.append(quest_data_dict[quest_id])
-    return completed_quests_data
+   for quest_id in character['completed_quests']:
+       if quest_id in quest_data_dict:
+          completed_quests_data.append(quest_data_dict[quest_id])
+   return completed_quests_data
 
 def get_available_quests(character, quest_data_dict):
     available_quests = []

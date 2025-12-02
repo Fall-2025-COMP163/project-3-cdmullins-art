@@ -115,6 +115,10 @@ def create_default_data_files():
 def parse_quest_block(lines):
     quest_data = {}
     for line in lines:
+        line = line.strip()  # Remove any leading/trailing spaces
+        if ": " not in line:
+            continue  # Skip lines that don't have the expected ": " delimiter
+
         try:
             key, value = line.split(": ", 1)
             if key == "QUEST_ID":

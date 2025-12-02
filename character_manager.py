@@ -37,7 +37,7 @@ def create_character(name, character_class):
         strength = 10  # Default strength
 
     return {
-        'name': character_name,  # Ensure 'name' is included
+        'name': name,  # Ensure 'name' is included
         'class': character_class,
         'level': 1,
         'health': max_health,  # Initialize health and max_health

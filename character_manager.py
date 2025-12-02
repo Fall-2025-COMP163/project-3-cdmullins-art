@@ -24,7 +24,7 @@ from custom_exceptions import (
 
 def create_character(name, character_class):
     return {
-        'name': character_name,  # Ensure 'name' is included
+        'name': name,  
         'class': character_class,
         'level': 1,
         'health': 100,

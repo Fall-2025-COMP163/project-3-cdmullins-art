@@ -88,6 +88,7 @@ def save_character(character, save_directory="data/save_games"):
         raise e
 
 def load_character(character_name, save_directory="data/save_games"):
+    
     save_path = os.path.join(save_directory, f"{character_name}_save.txt")
     
     if not os.path.exists(save_path):
@@ -98,11 +99,16 @@ def load_character(character_name, save_directory="data/save_games"):
         with open(save_path, 'r') as f:
             lines = f.readlines()
             for line in lines:
-                key, value = line.strip().split(": ")
+                # Skip empty lines or lines that do not contain ": "
+                if ": " not in line:
+                    continue  # Skip lines that are malformed or empty
+                
+                key, value = line.strip().split(": ", 1)  # Split correctly
                 if key == "INVENTORY" or key == "ACTIVE_QUESTS" or key == "COMPLETED_QUESTS":
-                    character[key] = value.split(',')
+                    character[key] = value.split(',')  # Split lists if needed
                 else:
-                    character[key] = value
+                    character[key] = value  # Otherwise, store the value directly
+
         # Convert relevant fields to proper types
         character['level'] = int(character['level'])
         character['health'] = int(character['health'])
@@ -111,6 +117,7 @@ def load_character(character_name, save_directory="data/save_games"):
         character['magic'] = int(character['magic'])
         character['experience'] = int(character['experience'])
         character['gold'] = int(character['gold'])
+
         return character
     except Exception as e:
         raise SaveFileCorruptedError(f"Error loading file '{character_name}_save.txt': {e}")

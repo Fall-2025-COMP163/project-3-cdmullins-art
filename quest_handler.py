@@ -24,14 +24,17 @@ from custom_exceptions import (
 # ============================================================================
 
 def accept_quest(character, quest_id, quest_data_dict):
-     if quest_id not in quest_data_dict:
+    if quest_id not in quest_data_dict:
         raise QuestNotFoundError(f"Quest '{quest_id}' not found.")
     
     quest_data = quest_data_dict[quest_id]
     
     if character['level'] < quest_data['required_level']:
         raise InsufficientLevelError(f"{character['name']} does not meet the level requirement for '{quest_id}'.")
-        
+
+    if quest_data['prerequisite'] != 'NONE' and quest_data['prerequisite'] not in character['completed_quests']:
+        raise QuestRequirementsNotMetError(f"Quest '{quest_id}' requires completing '{quest_data['prerequisite']}' first.")
+
     character['active_quests'].append(quest_id)
     print(f"Quest '{quest_id}' accepted by {character['name']}.")
     

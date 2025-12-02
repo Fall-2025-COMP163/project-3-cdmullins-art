@@ -34,21 +34,17 @@ def create_character(name, character_class):
         raise InvalidCharacterClassError(f"Invalid class: {character_class}. Choose from {', '.join(valid_classes.keys())}.")
 
     stats = valid_classes[character_class]
-    character = {
-        "name": name,
-        "class": character_class,
-        "level": 1,
-        "health": stats["health"],
-        "max_health": stats["health"],
-        "strength": stats["strength"],
-        "magic": stats["magic"],
-        "experience": 0,
-        "gold": 100,
-        "inventory": [],
-        "active_quests": [],
-        "completed_quests": [],
+    return {
+        'name': character_name,
+        'class': character_class,
+        'level': 1,
+        'health': 100,
+        'xp': 0,  # Ensure 'xp' is initialized
+        'gold': 50,
+        'inventory': [],
+        'active_quests': [],
+        'completed_quests': []
     }
-    return character
     
 def save_character(character, save_directory="data/save_games"):
     if not os.path.exists(save_directory):

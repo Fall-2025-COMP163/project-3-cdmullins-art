@@ -54,29 +54,7 @@ def clear_inventory(character):
 # ITEM USAGE
 # ============================================================================
 
-item_data = {
-    "health_potion": {
-        'cost': 25,
-        'type': 'consumable',  # Marked as consumable
-        'effect': 'health:20'  # Effect: increases health by 20
-    },
-    "iron_sword": {
-        'cost': 150,
-        'type': 'weapon',  # Marked as weapon (non-consumable)
-        'effect': 'strength:5'  # Effect: increases strength by 5
-    },
-    "expensive_item": {
-        'cost': 100,
-        'type': 'consumable',  # Marked as consumable
-        'effect': 'health:50'  # Effect: increases health by 50
-    },
-    # Add weapon1 if it's a valid item
-    "weapon1": {
-        'cost': 50,
-        'type': 'weapon',  # Marked as weapon
-        'effect': 'strength:3'  # Effect: increases strength by 3
-    }
-}
+item_data = {'expensive_item': {'cost': 100, 'effect': 'health:50', 'type': 'consumable'}, 'health_potion': {'cost': 25, 'effect': 'health:20', 'type': 'consumable'}, 'weapon1':{'cost':125, 'effect': 'strength:3', 'type': 'weapon'},  'iron_sword': {'cost': 150, 'effect': 'strength:5', 'type': 'weapon'}}
 
 def use_item(character, item_id, item_data):
     # Check if the item is in the inventory

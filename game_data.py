@@ -116,8 +116,8 @@ def create_default_data_files():
 # ============================================================================
 
 def parse_quest_block(lines):
-     quest_data = {}
-    
+    quest_data = {}
+   
     for line in lines:
         line = line.strip()  # Remove leading/trailing spaces
         if ": " not in line:

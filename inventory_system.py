@@ -54,11 +54,7 @@ def clear_inventory(character):
 # ITEM USAGE
 # ============================================================================
 
-def use_item(character, item_id, item_data):
-    if item_id not in character['inventory']:
-        raise ItemNotFoundError(f"Item {item_id} not found in inventory")
-
-    item_data = {
+item_data = {
     "health_potion": {
         'cost': 25,
         'type': 'consumable',  # Marked as consumable
@@ -73,27 +69,50 @@ def use_item(character, item_id, item_data):
         'cost': 100,
         'type': 'consumable',  # Marked as consumable
         'effect': 'health:50'  # Effect: increases health by 50
+    },
+    # Add weapon1 if it's a valid item
+    "weapon1": {
+        'cost': 50,
+        'type': 'weapon',  # Marked as weapon
+        'effect': 'strength:3'  # Effect: increases strength by 3
     }
-    }
-    item = item_data.get(item_id)
+}
+
+def use_item(character, item_id, item_data):
+    # Check if the item is in the inventory
+    if item_id not in character['inventory']:
+        raise ItemNotFoundError(f"Item {item_id} not found in inventory")
     
+    # Get the item data from the global item_data dictionary
+    item = item_data.get(item_id)
+
     if item is None:
         raise ItemNotFoundError(f"Item {item_id} not found in item data")
 
-    if item['type'] != 'consumable':
-        raise InvalidItemTypeError(f"Item {item_id} is not a consumable")
+    # If item is consumable, apply effect and remove it from inventory
+    if item['type'] == 'consumable':
+        effect = item['effect']
+        # Example: Apply health effect (this can be extended for other stats)
+        if "health:" in effect:
+            health_increase = int(effect.split(":")[1])
+            character['health'] += health_increase
+            character['health'] = min(character['health'], character['max_health'])  # Ensure health doesn't exceed max_health
+        character['inventory'].remove(item_id)
+        return f"Used {item_id}, health increased by {health_increase}."
 
-    # Parse the effect (e.g., "health:20")
-    stat_name, value = item['effect'].split(":")
-    value = int(value)  # Convert value to an integer
+    # If item is a weapon, just equip it (no consumable effect)
+    elif item['type'] == 'weapon':
+        # Equip the weapon (you could extend this logic to modify character stats)
+        return f"Equipped {item_id} (Strength increased by {item['effect'].split(':')[1]})"
     
-    # Apply the effect to the character (e.g., increase health)
-    apply_stat_effect(character, stat_name, value)
+    # Handle invalid item type
+    else:
+        raise InvalidItemTypeError(f"Item {item_id} is not consumable or weapon.")
 
-    # Remove the item from the inventory after using it
-    character['inventory'].remove(item_id)
-    
-    return f"Used {item_id}, {stat_name} increased by {value}."
+# Test Example
+character = {'health': 80, 'inventory': ['weapon1'], 'max_health': 100, 'strength': 10}
+result = use_item(character, 'weapon1', item_data)
+print(result)
     
 def equip_weapon(character, item_id, item_data):
     if item_id not in character['inventory']:

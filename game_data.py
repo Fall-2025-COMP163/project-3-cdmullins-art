@@ -160,42 +160,29 @@ def load_items(filename="data/items.txt"):
     
 
 def validate_quest_data(quest_dict):
-    """
-    Validate that quest dictionary has all required fields
     
-    Required fields: quest_id, title, description, reward_xp, 
-                    reward_gold, required_level, prerequisite
-    
-    Returns: True if valid
-    Raises: InvalidDataFormatError if missing required fields
-    """
     required_fields = {
-        "QUEST_ID": str,
-        "TITLE": str,
-        "DESCRIPTION": str,
-        "REWARD_XP": int,
-        "REWARD_GOLD": int,
-        "REQUIRED_LEVEL": int,
-        "PREREQUISITE": str,
+        "quest_id": str,
+        "title": str,
+        "description": str,
+        "reward_xp": int,
+        "reward_gold": int,
+        "required_level": int,
+        "prerequisite": str,
     }
 
-    lowercase_keys = {key.lower(): value for key, value in quest_dict.items()}
-    value = quest_dict[field]
-
-    # Validation loop
-    for field, expected_type in required_fields.items():
-        if field not in normalized:
-            raise InvalidDataFormatError(f"Missing required field: {field}")
-            
-        value = normalized[field]
+    # Loop through the required fields and check if they are in the quest_dict
+    for key, expected_type in required_fields.items():
+        # Check if the key exists in the quest_dict
+        if key not in quest_dict:
+            raise InvalidDataFormatError(f"Missing required field: {key}")
         
-        if not isinstance(value, expected_type):
-            raise InvalidDataFormatError(f"Invalid type for field '{field}': expected {expected_type.__name__}")
-
+        # Check if the field's value type matches the expected type
+        if not isinstance(quest_dict[key], expected_type):
+            raise InvalidDataFormatError(f"Field '{key}' should be of type {expected_type.__name__}, but got {type(quest_dict[key]).__name__}.")
+    
+    # If no issues were found, return True indicating the data is valid
     return True
-    # TODO: Implement validation
-    # Check that all required keys exist
-    # Check that numeric values are actually numbers
     
 
 def validate_item_data(item_dict):

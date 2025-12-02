@@ -23,23 +23,12 @@ from custom_exceptions import (
 # ============================================================================
 
 def create_character(name, character_class):
-    valid_classes = {
-        "Warrior": {"health": 120, "strength": 15, "magic": 5},
-        "Mage": {"health": 80, "strength": 8, "magic": 20},
-        "Rogue": {"health": 90, "strength": 12, "magic": 10},
-        "Cleric": {"health": 100, "strength": 10, "magic": 15},
-    }
-
-    if character_class not in valid_classes:
-        raise InvalidCharacterClassError(f"Invalid class: {character_class}. Choose from {', '.join(valid_classes.keys())}.")
-
-    stats = valid_classes[character_class]
     return {
-        'name': character_name,
+        'name': character_name,  # Ensure 'name' is included
         'class': character_class,
         'level': 1,
         'health': 100,
-        'xp': 0,  # Ensure 'xp' is initialized
+        'xp': 0,
         'gold': 50,
         'inventory': [],
         'active_quests': [],

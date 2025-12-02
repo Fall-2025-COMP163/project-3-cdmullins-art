@@ -209,36 +209,28 @@ def validate_item_data(item_dict):
     Raises: InvalidDataFormatError if missing required fields or invalid type
     """
     def validate_quest_data(quest_dict):
-    """
-    Validate that quest dictionary has all required fields
+    
+        required_fields = {
+            "quest_id": str,
+            "title": str,
+            "description": str,
+            "reward_xp": int,
+            "reward_gold": int,
+            "required_level": int,
+            "prerequisite": str,
+        }
 
-    Required fields: quest_id, title, description, reward_xp,
-                    reward_gold, required_level, prerequisite
 
-    Returns: True if valid
-    Raises: InvalidDataFormatError if missing required fields
-    """
-    required_fields = {
-        "quest_id": str,
-        "title": str,
-        "description": str,
-        "reward_xp": int,
-        "reward_gold": int,
-        "required_level": int,
-        "prerequisite": str,
-    }
+        for key, expected_type in required_fields.items():
 
-    # Iterate over the required fields to validate each field in quest_dict
-    for key, expected_type in required_fields.items():
-        # Ensure the field exists in the quest dictionary
-        if key not in quest_dict:
-            raise InvalidDataFormatError(f"Missing required field: {key}")
+            if key not in quest_dict:
+                raise InvalidDataFormatError(f"Missing required field: {key}")
 
-        # Ensure the value is of the correct type
-        if not isinstance(quest_dict[key], expected_type):
-            raise InvalidDataFormatError(f"Field '{key}' should be of type {expected_type.__name__}, but got {type(quest_dict[key]).__name__}.")
 
-    # If all checks pass, return True
+            if not isinstance(quest_dict[key], expected_type):
+                raise InvalidDataFormatError(f"Field '{key}' should be of type {expected_type.__name__}, but got {type(quest_dict[key]).__name__}.")
+
+  
     return True
     
 def create_default_data_files():

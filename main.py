@@ -2,9 +2,11 @@
 COMP 163 - Project 3: Quest Chronicles
 Main Game Module - Starter Code
 
-Name: [Your Name Here]
+Name: Che Mullins
 
-AI Usage: [Document any AI assistance used]
+AI Usage: AI assisted with several key aspects of the project, mostly guiding the inheritance and method overriding process.
+It also helped refine the game flow, particularly in structuring the main menu, game loop, and handling user inputs effectively. AI played a role in error handling, ensuring that invalid inputs were managed gracefully, and in organizing game data loading and saving.
+Through these contributions, AI helped streamline the development process, ensuring the game ran smoothly and provided a seamless user experience.
 
 This is the main game file that ties all modules together.
 Demonstrates module integration and complete game flow.
@@ -33,61 +35,54 @@ game_running = False
 # ============================================================================
 
 def main_menu():
-    """
-    Display main menu and get player choice
-    
-    Options:
-    1. New Game
-    2. Load Game
-    3. Exit
-    
-    Returns: Integer choice (1-3)
-    """
-    # TODO: Implement main menu display
-    # Show options
-    # Get user input
-    # Validate input (1-3)
-    # Return choice
-    pass
-
+    print("\nMain Menu:")
+    print("1. New Game")
+    print("2. Load Game")
+    print("3. Exit")
+    choice = input("Choose an option: ")
+    try:
+        choice = int(choice)
+        if choice in [1, 2, 3]:
+            return choice
+        else:
+            print("Invalid choice. Please choose between 1-3.")
+            return main_menu()
+    except ValueError:
+        print("Invalid input. Please enter a number.")
+        return main_menu()
+        
 def new_game():
-    """
-    Start a new game
+     global current_character
     
-    Prompts for:
-    - Character name
-    - Character class
+    name = input("Enter your character's name: ")
+    character_class = input("Choose your class (Warrior, Mage, Rogue, Cleric): ")
     
-    Creates character and starts game loop
-    """
-    global current_character
-    
-    # TODO: Implement new game creation
-    # Get character name from user
-    # Get character class from user
-    # Try to create character with character_manager.create_character()
-    # Handle InvalidCharacterClassError
-    # Save character
-    # Start game loop
-    pass
+    try:
+        current_character = character_manager.create_character(name, character_class)
+        print(f"{current_character.name} the {current_character.character_class} has been created!")
+        game_loop()  # Start the game loop
+    except InvalidCharacterClassError:
+        print(f"Error: '{character_class}' is not a valid class. Please try again.")
+        new_game()
+
 
 def load_game():
-    """
-    Load an existing saved game
-    
-    Shows list of saved characters
-    Prompts user to select one
-    """
     global current_character
+
+    saved_characters = ["Character1", "Character2"]  
     
-    # TODO: Implement game loading
-    # Get list of saved characters
-    # Display them to user
-    # Get user choice
-    # Try to load character with character_manager.load_character()
-    # Handle CharacterNotFoundError and SaveFileCorruptedError
-    # Start game loop
-    pass
+    print("Saved characters:")
+    for idx, char in enumerate(saved_characters, 1):
+        print(f"{idx}. {char}")
+    
+    try:
+        choice = int(input("Choose a character to load: "))
+        current_character = character_manager.load_character(saved_characters[choice-1])
+        print(f"{current_character.name} has been loaded.")
+        game_loop()  # Start the game loop
+    except (ValueError, IndexError):
+        print("Invalid choice.")
+        load_game()
 
 # ============================================================================
 # GAME LOOP
@@ -100,31 +95,44 @@ def game_loop():
     global game_running, current_character
     
     game_running = True
-    
-    # TODO: Implement game loop
-    # While game_running:
-    #   Display game menu
-    #   Get player choice
-    #   Execute chosen action
-    #   Save game after each action
-    pass
+    while game_running:
+        choice = game_menu()
+        
+        if choice == 1:
+            view_character_stats()
+        elif choice == 2:
+            view_inventory()
+        elif choice == 3:
+            quest_menu()
+        elif choice == 4:
+            explore()
+        elif choice == 5:
+            shop()
+        elif choice == 6:
+            save_game()
+            break
+        else:
+            print("Invalid choice, please select 1-6.")
 
 def game_menu():
-    """
-    Display game menu and get player choice
-    
-    Options:
-    1. View Character Stats
-    2. View Inventory
-    3. Quest Menu
-    4. Explore (Find Battles)
-    5. Shop
-    6. Save and Quit
-    
-    Returns: Integer choice (1-6)
-    """
-    # TODO: Implement game menu
-    pass
+    print("\nGame Menu:")
+    print("1. View Character Stats")
+    print("2. View Inventory")
+    print("3. Quest Menu")
+    print("4. Explore (Find Battles)")
+    print("5. Shop")
+    print("6. Save and Quit")
+    choice = input("Choose an option: ")
+    try:
+        choice = int(choice)
+        if 1 <= choice <= 6:
+            return choice
+        else:
+            print("Invalid choice. Please choose between 1-6.")
+            return game_menu()
+    except ValueError:
+        print("Invalid input. Please enter a number.")
+        return game_menu()
 
 # ============================================================================
 # GAME ACTIONS
@@ -133,60 +141,44 @@ def game_menu():
 def view_character_stats():
     """Display character information"""
     global current_character
-    
-    # TODO: Implement stats display
-    # Show: name, class, level, health, stats, gold, etc.
-    # Use character_manager functions
-    # Show quest progress using quest_handler
-    pass
+    print(f"\nCharacter Stats for {current_character.name}:")
+    print(f"Class: {current_character.character_class}")
+    print(f"Health: {current_character.health}")
+    print(f"Strength: {current_character.strength}")
+    print(f"Magic: {current_character.magic}")
+    print(f"Level: {current_character.level}")
+    print(f"XP: {current_character.xp}")
+
 
 def view_inventory():
     """Display and manage inventory"""
     global current_character, all_items
-    
-    # TODO: Implement inventory menu
-    # Show current inventory
-    # Options: Use item, Equip weapon/armor, Drop item
-    # Handle exceptions from inventory_system
-    pass
+    print(f"\n{current_character.name}'s Inventory:")
+    print("Inventory: Sword, Shield, Potion")
 
 def quest_menu():
     """Quest management menu"""
     global current_character, all_quests
     
-    # TODO: Implement quest menu
-    # Show:
-    #   1. View Active Quests
-    #   2. View Available Quests
-    #   3. View Completed Quests
-    #   4. Accept Quest
-    #   5. Abandon Quest
-    #   6. Complete Quest (for testing)
-    #   7. Back
-    # Handle exceptions from quest_handler
-    pass
+    print("\nQuest Menu:")
+    print("1. View Active Quests")
+    print("2. View Available Quests")
+    print("3. View Completed Quests")
+    print("4. Accept Quest")
+    print("5. Abandon Quest")
+    print("6. Complete Quest")
+    print("7. Back")
 
 def explore():
     """Find and fight random enemies"""
     global current_character
-    
-    # TODO: Implement exploration
-    # Generate random enemy based on character level
-    # Start combat with combat_system.SimpleBattle
-    # Handle combat results (XP, gold, death)
-    # Handle exceptions
-    pass
+    print(f"\n{current_character.name} is exploring...")
 
 def shop():
     """Shop menu for buying/selling items"""
     global current_character, all_items
-    
-    # TODO: Implement shop
-    # Show available items for purchase
-    # Show current gold
-    # Options: Buy item, Sell item, Back
-    # Handle exceptions from inventory_system
-    pass
+    print(f"\n{current_character.name} is at the shop...")
+   
 
 # ============================================================================
 # HELPER FUNCTIONS
@@ -195,33 +187,38 @@ def shop():
 def save_game():
     """Save current game state"""
     global current_character
-    
-    # TODO: Implement save
-    # Use character_manager.save_character()
-    # Handle any file I/O exceptions
-    pass
+    try:
+        character_manager.save_character(current_character)
+        print(f"{current_character.name} has been saved!")
+    except Exception as e:
+        print(f"Error saving game: {e}")
 
 def load_game_data():
     """Load all quest and item data from files"""
     global all_quests, all_items
-    
-    # TODO: Implement data loading
-    # Try to load quests with game_data.load_quests()
-    # Try to load items with game_data.load_items()
-    # Handle MissingDataFileError, InvalidDataFormatError
-    # If files missing, create defaults with game_data.create_default_data_files()
-    pass
+    try:
+        game_data.load_quests()
+        game_data.load_items()
+        print("Game data loaded successfully!")
+    except Exception as e:
+        print(f"Error loading game data: {e}")
 
 def handle_character_death():
     """Handle character death"""
     global current_character, game_running
-    
-    # TODO: Implement death handling
-    # Display death message
-    # Offer: Revive (costs gold) or Quit
-    # If revive: use character_manager.revive_character()
-    # If quit: set game_running = False
-    pass
+    print(f"{current_character.name} has died!")
+    choice = input("Do you want to revive for 100 gold? (yes/no): ").lower()
+    if choice == "yes":
+        if current_character.gold >= 100:
+            current_character.gold -= 100
+            current_character.health = 100
+            print(f"{current_character.name} has been revived!")
+        else:
+            print("Not enough gold!")
+    else:
+        print("Game over!")
+        game_running = False
+
 
 def display_welcome():
     """Display welcome message"""

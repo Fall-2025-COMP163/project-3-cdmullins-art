@@ -117,9 +117,12 @@ def create_default_data_files():
 
 def parse_quest_block(lines):
     quest_data = {}
-   
+    
     for line in lines:
         line = line.strip()  # Remove leading/trailing spaces
+        if not line:
+            continue  # Skip empty lines
+        
         if ": " not in line:
             raise InvalidDataFormatError(f"Invalid format in quest block: {line}")
 
@@ -141,11 +144,12 @@ def parse_quest_block(lines):
                 quest_data['prerequisite'] = value
         except ValueError:
             raise InvalidDataFormatError(f"Invalid format in quest block: {line}")
-            
+
     if 'quest_id' not in quest_data:
         raise InvalidDataFormatError("Quest block is missing 'quest_id'.")
-    
+
     return quest_data
+    
 
 def parse_item_block(lines):
     item_data = {}

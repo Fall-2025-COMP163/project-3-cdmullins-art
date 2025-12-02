@@ -186,9 +186,9 @@ def get_victory_rewards(enemy):
      rewards = {
         'xp': enemy.get('xp_reward', 0),  # Default to 0 if no xp_reward key exists
         'gold': enemy.get('gold_reward', 0)  # Default to 0 if no gold_reward key exists
-    }
+     }
 
-    return rewards
+     return rewards
 
 def display_combat_stats(character, enemy):
     print(f"\n{character['name']}: HP={character['health']}/{character['max_health']}")

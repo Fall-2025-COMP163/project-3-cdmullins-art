@@ -23,32 +23,42 @@ from custom_exceptions import (
 # ============================================================================
 
 def create_character(name, character_class):
+    
     if character_class == "Warrior":
         max_health = 150
         strength = 20
+        magic = 5
     elif character_class == "Mage":
+        max_health = 80
+        strength = 5
+        magic = 20
+    elif character_class == "Rogue":
         max_health = 100
-        strength = 10
-    elif character_class == "Cleric":
-        max_health = 120
         strength = 15
+        magic = 10
+    elif character_class == "Cleric":
+        max_health = 110
+        strength = 10
+        magic = 15
     else:
-        max_health = 100  # Default max_health
-        strength = 10  # Default strength
+        raise InvalidCharacterClassError(f"Invalid class: {character_class}")
 
+    
     return {
-        'name': character_name,  # Ensure 'name' is included
-        'class': character_class,
-        'level': 1,
-        'health': max_health,  # Initialize health and max_health
-        'max_health': max_health,  # Initialize max_health
-        'strength': strength,  # Initialize strength
-        'experience': 0,  # Initialize experience
-        'gold': 50,
-        'inventory': [],
-        'active_quests': [],
-        'completed_quests': []
+        "name": character_name,
+        "class": character_class,
+        "level": 1,
+        "health": max_health,
+        "max_health": max_health,
+        "strength": strength,
+        "magic": magic,
+        "experience": 0,
+        "gold": 50,
+        "inventory": [],
+        "active_quests": [],
+        "completed_quests": []
     }
+
     
 def save_character(character, save_directory="data/save_games"):
     if not os.path.exists(save_directory):

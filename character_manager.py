@@ -100,14 +100,22 @@ def load_character(character_name, save_directory="data/save_games"):
             lines = f.readlines()
             for line in lines:
                 # Skip empty lines or lines that do not contain ": "
-                if ": " not in line:
+                if ": " not in line or line.strip() == "":
                     continue  # Skip lines that are malformed or empty
                 
-                key, value = line.strip().split(": ", 1)  # Split correctly
-                if key == "INVENTORY" or key == "ACTIVE_QUESTS" or key == "COMPLETED_QUESTS":
-                    character[key] = value.split(',')  # Split lists if needed
-                else:
-                    character[key] = value  # Otherwise, store the value directly
+                try:
+                    # Split the line into key and value
+                    key, value = line.strip().split(": ", 1)
+                    
+                    # Process specific keys that require special handling (e.g., lists)
+                    if key == "INVENTORY" or key == "ACTIVE_QUESTS" or key == "COMPLETED_QUESTS":
+                        character[key] = value.split(',')
+                    else:
+                        character[key] = value  # Store the value directly
+                except ValueError:
+                    # If splitting fails, skip the line or log an error
+                    print(f"Warning: Malformed line in save file: {line.strip()}")
+                    continue
 
         # Convert relevant fields to proper types
         character['level'] = int(character['level'])
@@ -121,6 +129,7 @@ def load_character(character_name, save_directory="data/save_games"):
         return character
     except Exception as e:
         raise SaveFileCorruptedError(f"Error loading file '{character_name}_save.txt': {e}")
+
 
 def list_saved_characters(save_directory="data/save_games"):
      if not os.path.exists(save_directory):

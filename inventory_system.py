@@ -185,11 +185,20 @@ def sell_item(character, item_id, item_data):
     if item_id not in character['inventory']:
         raise ItemNotFoundError(f"Item {item_id} not found in inventory")
     
-    sell_price = item_data[item_id]['cost'] // 2
+    item = item_data.get(item_id)  # Retrieve item from item_data
+    if item is None:
+        raise ItemNotFoundError(f"Item {item_id} not found in item data")
+    
+    # Calculate sell price (half of the cost)
+    sell_price = item['cost'] // 2
+    
+    # Remove item from inventory
+    character['inventory'].remove(item_id)
+    
+    # Add gold to character
     character['gold'] += sell_price
-    remove_item_from_inventory(character, item_id)
+    
     return sell_price
-
 # ============================================================================
 # HELPER FUNCTIONS
 # ============================================================================

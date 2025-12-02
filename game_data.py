@@ -28,8 +28,11 @@ def load_quests(filename="data/quests.txt"):
             quest_data = file.read().strip().split("\n\n")  # Separate quests by blank lines
             for quest_block in quest_data:
                 lines = quest_block.splitlines()
-                quest = parse_quest_block(lines)
-                quests[quest['quest_id']] = quest
+                try:
+                    quest = parse_quest_block(lines)
+                    quests[quest['quest_id']] = quest
+                except InvalidDataFormatError as e:
+                    raise InvalidDataFormatError(f"Error parsing quest block in {filename}: {e}")
     except FileNotFoundError:
         raise MissingDataFileError(f"{filename} not found.")
     except Exception as e:

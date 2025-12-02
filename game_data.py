@@ -209,37 +209,27 @@ def validate_item_data(item_dict):
     Raises: InvalidDataFormatError if missing required fields or invalid type
     """
     required_fields = {
-        "ITEM_ID": str,
-        "NAME": str,
-        "TYPE": str,
-        "EFFECT": str,
-        "COST": int,
+        "QUEST_ID": str,
+        "TITLE": str,
         "DESCRIPTION": str,
+        "REWARD_XP": int,
+        "REWARD_GOLD": int,
+        "REQUIRED_LEVEL": int,
+        "PREREQUISITE": str,
     }
 
-    valid_types = ["weapon", "armor", "consumable"]
-
-    for field, expected_type in required_fields.items():
-        if field not in item_dict:
+    # Iterate over the required fields
+    for field, field_type in required_fields.items():
+        # Ensure the field exists in the quest dictionary and check its type
+        if field not in quest_dict:
             raise InvalidDataFormatError(f"Missing required field: {field}")
-
-        # Check type
-        if not isinstance(item_dict[field], expected_type):
-            raise InvalidDataFormatError(
-                f"Field '{field}' must be of type {expected_type.__name__}"
-            )
-
-    # Check item type validity
-    if item_dict["TYPE"] not in valid_types:
-        raise InvalidDataFormatError(
-            f"Invalid item type: {item_dict['TYPE']}. Must be one of {valid_types}"
-        )
-
-    return True
-
-
-    # TODO: Implement validation
+        
+        # Check that the value has the correct type
+        if not isinstance(quest_dict[field], field_type):
+            raise InvalidDataFormatError(f"Field '{field}' should be of type {field_type.__name__}")
     
+    # If all checks pass, return True
+    return True
 
 def create_default_data_files():
     """

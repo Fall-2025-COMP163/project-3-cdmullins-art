@@ -208,29 +208,39 @@ def validate_item_data(item_dict):
     Returns: True if valid
     Raises: InvalidDataFormatError if missing required fields or invalid type
     """
+    def validate_quest_data(quest_dict):
+    """
+    Validate that quest dictionary has all required fields
+
+    Required fields: quest_id, title, description, reward_xp,
+                    reward_gold, required_level, prerequisite
+
+    Returns: True if valid
+    Raises: InvalidDataFormatError if missing required fields
+    """
     required_fields = {
-        "QUEST_ID": str,
-        "TITLE": str,
-        "DESCRIPTION": str,
-        "REWARD_XP": int,
-        "REWARD_GOLD": int,
-        "REQUIRED_LEVEL": int,
-        "PREREQUISITE": str,
+        "quest_id": str,
+        "title": str,
+        "description": str,
+        "reward_xp": int,
+        "reward_gold": int,
+        "required_level": int,
+        "prerequisite": str,
     }
 
-    # Iterate over the required fields
-    for field, field_type in required_fields.items():
-        # Ensure the field exists in the quest dictionary and check its type
-        if field not in quest_dict:
-            raise InvalidDataFormatError(f"Missing required field: {field}")
-        
-        # Check that the value has the correct type
-        if not isinstance(quest_dict[field], field_type):
-            raise InvalidDataFormatError(f"Field '{field}' should be of type {field_type.__name__}")
-    
+    # Iterate over the required fields to validate each field in quest_dict
+    for key, expected_type in required_fields.items():
+        # Ensure the field exists in the quest dictionary
+        if key not in quest_dict:
+            raise InvalidDataFormatError(f"Missing required field: {key}")
+
+        # Ensure the value is of the correct type
+        if not isinstance(quest_dict[key], expected_type):
+            raise InvalidDataFormatError(f"Field '{key}' should be of type {expected_type.__name__}, but got {type(quest_dict[key]).__name__}.")
+
     # If all checks pass, return True
     return True
-
+    
 def create_default_data_files():
     """
     Create default data files if they don't exist

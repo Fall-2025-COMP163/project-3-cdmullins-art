@@ -164,19 +164,24 @@ def purchase_item(character, item_id, item_data):
         "expensive_item": {'cost': 100, 'type': 'consumable', 'effect': 'health:50'},
         "health_potion": {'cost': 25, 'type': 'consumable', 'effect': 'health:20'},
         "iron_sword": {'cost': 150, 'type': 'weapon', 'effect': 'strength:5'}
-    } 
+    }
+
     
     if item_id not in item_data:
         raise ItemNotFoundError(f"Item {item_id} not found in item data")
 
-    item = item_data[item_id]
+    item = item_data[item_id]  # Retrieve the item from item_data using item_id
+    
+    
     if character['gold'] < item['cost']:
         raise InsufficientResourcesError("Not enough gold!")
 
+    
     if len(character['inventory']) >= MAX_INVENTORY_SIZE:
         raise InventoryFullError("Inventory is full!")
 
     character['gold'] -= item['cost']
+    
     add_item_to_inventory(character, item_id)
     
     return True

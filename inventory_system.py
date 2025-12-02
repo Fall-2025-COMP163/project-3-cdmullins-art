@@ -153,7 +153,8 @@ def unequip_armor(character):
 # ============================================================================
 
 def purchase_item(character, item_id, item_data):
-     item_data = {
+    
+    item_data = {
         "expensive_item": {'cost': 100, 'type': 'consumable', 'effect': 'health:50'},
         "health_potion": {'cost': 25, 'type': 'consumable', 'effect': 'health:20'},
         "iron_sword": {'cost': 150, 'type': 'weapon', 'effect': 'strength:5'}
@@ -169,7 +170,6 @@ def purchase_item(character, item_id, item_data):
     if len(character['inventory']) >= MAX_INVENTORY_SIZE:
         raise InventoryFullError("Inventory is full!")
 
-    # Deduct gold and add item to inventory
     character['gold'] -= item['cost']
     add_item_to_inventory(character, item_id)
     

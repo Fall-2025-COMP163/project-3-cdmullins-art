@@ -58,16 +58,22 @@ def use_item(character, item_id, item_data):
     if item_id not in character['inventory']:
         raise ItemNotFoundError(f"Item {item_id} not found in inventory")
     
+    # Retrieve the item from the item_data dictionary
     item = item_data.get(item_id)
     if item is None or item['type'] != 'consumable':
         raise InvalidItemTypeError(f"Item {item_id} is not a consumable")
     
-    effect = item['effect']
-    stat_name, value = parse_item_effect(effect)
+    # Parse effect (format: "stat_name:value" e.g., "health:20")
+    stat_name, value = item['effect'].split(":")
+    value = int(value)  # Ensure the value is an integer
+    
+    # Apply effect to character
     apply_stat_effect(character, stat_name, value)
+    
+    # Remove the item from inventory after use
     character['inventory'].remove(item_id)
-    return f"{item_id} used. {stat_name} increased by {value}."
-
+    
+    return f"Used {item_id}, {stat_name} increased by {value}."
 
 def equip_weapon(character, item_id, item_data):
     if item_id not in character['inventory']:

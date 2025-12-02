@@ -25,7 +25,6 @@ from custom_exceptions import (
 # character_manager.py
 
 def create_character(name, character_class):
-   
     if character_class == "Warrior":
         max_health = 150
         strength = 20
@@ -44,22 +43,24 @@ def create_character(name, character_class):
         magic = 15
     else:
         raise InvalidCharacterClassError(f"Invalid class: {character_class}")
-
-    # Ensure all required keys are present
-    return {
-        "name": name,              # Character name (passed parameter)
-        "class": character_class,  # Character class (passed parameter)
-        "level": 1,                # Default level
-        "health": max_health,      # Set health
-        "max_health": max_health,  # Set max health
-        "strength": strength,      # Set strength
-        "magic": magic,            # Set magic power
-        "experience": 0,           # Set initial experience (this is where KeyError happens)
-        "gold": 50,                # Default gold value
-        "inventory": [],           # Default empty inventory
-        "active_quests": [],       # Default empty active quests
-        "completed_quests": []     # Default empty completed quests
+    
+    # Ensure the character is fully initialized with all the necessary keys.
+    character = {
+        "name": name,  # Ensure name is initialized properly
+        "class": character_class,
+        "level": 1,
+        "health": max_health,
+        "max_health": max_health,
+        "strength": strength,
+        "magic": magic,
+        "experience": 0,  # Explicitly set experience key
+        "gold": 50,
+        "inventory": [],
+        "active_quests": [],
+        "completed_quests": []
     }
+
+    return character
 
 
     
@@ -88,9 +89,8 @@ def save_character(character, save_directory="data/save_games"):
         raise e
 
 def load_character(character_name, save_directory="data/save_games"):
-    
-    save_path = os.path.join(save_directory, f"{character_name}_save.txt")
-    
+     save_path = os.path.join(save_directory, f"{character_name}_save.txt")
+
     if not os.path.exists(save_path):
         raise CharacterNotFoundError(f"Character '{character_name}' not found.")
     
@@ -101,12 +101,12 @@ def load_character(character_name, save_directory="data/save_games"):
             for line in lines:
                 # Skip empty lines or lines that do not contain ": "
                 if ": " not in line or line.strip() == "":
-                    continue  # Skip lines that are malformed or empty
-                
+                    continue
+
                 try:
                     # Split the line into key and value
                     key, value = line.strip().split(": ", 1)
-                    
+
                     # Process specific keys that require special handling (e.g., lists)
                     if key == "INVENTORY" or key == "ACTIVE_QUESTS" or key == "COMPLETED_QUESTS":
                         character[key] = value.split(',')
@@ -117,20 +117,19 @@ def load_character(character_name, save_directory="data/save_games"):
                     print(f"Warning: Malformed line in save file: {line.strip()}")
                     continue
 
-        # Convert relevant fields to proper types
-        character['level'] = int(character['level'])
-        character['health'] = int(character['health'])
-        character['max_health'] = int(character['max_health'])
-        character['strength'] = int(character['strength'])
-        character['magic'] = int(character['magic'])
-        character['experience'] = int(character['experience'])
-        character['gold'] = int(character['gold'])
+        # Convert relevant fields to proper types, with defaults if the key is missing
+        character['level'] = int(character.get('level', 1))  # Default to 1 if not found
+        character['health'] = int(character.get('health', 100))  # Default to 100 if not found
+        character['max_health'] = int(character.get('max_health', 100))  # Default to 100 if not found
+        character['strength'] = int(character.get('strength', 5))  # Default to 5 if not found
+        character['magic'] = int(character.get('magic', 5))  # Default to 5 if not found
+        character['experience'] = int(character.get('experience', 0))  # Default to 0 if not found
+        character['gold'] = int(character.get('gold', 50))  # Default to 50 if not found
 
         return character
     except Exception as e:
         raise SaveFileCorruptedError(f"Error loading file '{character_name}_save.txt': {e}")
-
-
+        
 def list_saved_characters(save_directory="data/save_games"):
      if not os.path.exists(save_directory):
         return []

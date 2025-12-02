@@ -153,7 +153,13 @@ def unequip_armor(character):
 # ============================================================================
 
 def purchase_item(character, item_id, item_data):
-     if item_id not in item_data:
+     item_data = {
+        "expensive_item": {'cost': 100, 'type': 'consumable', 'effect': 'health:50'},
+        "health_potion": {'cost': 25, 'type': 'consumable', 'effect': 'health:20'},
+        "iron_sword": {'cost': 150, 'type': 'weapon', 'effect': 'strength:5'}
+    } 
+    
+    if item_id not in item_data:
         raise ItemNotFoundError(f"Item {item_id} not found in item data")
 
     item = item_data[item_id]

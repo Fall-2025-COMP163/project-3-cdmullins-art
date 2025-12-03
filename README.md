@@ -1,151 +1,27 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/wnCpjX4n)
-[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-2e0aaae1b6195c2367325f4f02e2d04e9abb55f0b24a779b69b11b9e10269abc.svg)](https://classroom.github.com/online_ide?assignment_repo_id=21703208&assignment_repo_type=AssignmentRepo)
-# COMP 163: Project 3 - Quest Chronicles
+The project is organized into distinct modules, each focused on a specific part of the game logic. The main.py file serves as the entry point, orchestrating the game’s flow by tying together the various systems, including character creation, inventory management, combat, and quests. The character_manager.py module handles the creation and management of player characters, with each character's stats, class, and level being initialized and updated here. Inventory management is separated into the inventory_system.py, which governs the addition, removal, and usage of items during gameplay. The quest_handler.py module manages all aspects of quests, from assignment to completion, while the combat_system.py module handles the turn-based combat mechanics, ensuring a smooth encounter experience. Game data, including items and quests, is loaded from external files via game_data.py, isolating game content from the logic and making it easier to update or expand. Finally, custom_exceptions.py defines the custom exceptions, allowing for a standardized way to handle errors across the game. This modular architecture improves maintainability, ensures that each component has a clear responsibility, and allows for easy extension of the game without affecting the underlying systems.
 
-**AI Usage: Free Use (with explanation requirement)**
+Exception Strategy
 
-## Overview
+The game uses a well-defined exception strategy to ensure robustness and maintainability. Custom exceptions are defined in the custom_exceptions.py module to handle specific error conditions that may arise during gameplay. For example, if a player attempts to create a character with an invalid class, the InvalidCharacterClassError is raised. Similarly, attempting to load a corrupted game save file results in the SaveFileCorruptedError. Inventory errors, such as trying to equip an item that is not present in the character's inventory, are handled by raising the ItemNotFoundError. These custom exceptions ensure that any invalid actions or system failures are caught early, and appropriate feedback is provided to the player. This strategy helps maintain a clean, predictable game flow and allows for easier debugging by making error conditions explicit rather than relying on return codes or generic exceptions.
 
-Build a complete modular RPG adventure game demonstrating mastery of **exceptions and modules**.
+Design Choices
 
-## Getting Started
+The design choices in this project are aimed at creating a modular, extensible, and user-friendly game. The decision to split functionality across multiple modules (e.g., character management, inventory system, quests, combat) adheres to the principle of separation of concerns, making the code more maintainable and easier to extend. By keeping each module focused on a specific responsibility, the game logic remains clean, and new features can be added with minimal disruption to existing code. The use of external data files for quests, items, and enemy definitions provides flexibility, allowing content to be modified without touching the game’s core logic. This also makes it easier to scale the game in the future, whether by adding new quests or expanding the inventory system. Additionally, raising custom exceptions for different error conditions makes error handling explicit, improving the game’s reliability and user experience. Overall, these design decisions are intended to create a solid foundation that supports future development while maintaining clarity and simplicity in the current game structure.
 
-### Step 1: Accept Assignment
-1. Click the assignment link provided in Blackboard
-2. Accept the assignment - this creates your personal repository
-3. Clone your repository to your local machine:
-```bash
-git clone [your-personal-repo-url]
-cd [repository-name]
-```
+AI Usage
 
-### Step 2: Understand the Project Structure
+AI, specifically ChatGPT, was instrumental in the early stages of development, assisting with brainstorming and structuring the modules of the game. It helped in deciding which components were necessary (e.g., character management, inventory system, combat mechanics) and how best to organize them into separate files. AI also contributed to drafting error-handling strategies, suggesting appropriate custom exceptions to raise for various edge cases, such as invalid character creation or corrupted save files. Additionally, AI was used to generate function docstrings and comments, which helped improve code readability and maintainability. The guidance provided by AI ensured that the overall architecture adhered to best practices, and its support in refactoring and debugging made the development process smoother. It was also helpful in generating the initial README documentation and providing suggestions for testing strategies, contributing to the completeness and transparency of the project.
 
-Your repository contains:
+How to Play
 
-```
-quest_chronicles/
-├── main.py                     # Game launcher (COMPLETE THIS)
-├── character_manager.py        # Character creation/management (COMPLETE THIS)
-├── inventory_system.py         # Item and equipment management (COMPLETE THIS)
-├── quest_handler.py            # Quest system (COMPLETE THIS)
-├── combat_system.py            # Battle mechanics (COMPLETE THIS)
-├── game_data.py                # Data loading and validation (COMPLETE THIS)
-├── custom_exceptions.py        # Exception definitions (PROVIDED)
-├── data/
-│   ├── quests.txt             # Quest definitions (PROVIDED)
-│   ├── items.txt              # Item database (PROVIDED)
-│   └── save_games/            # Player save files (created automatically)
-├── tests/
-│   ├── test_module_structure.py       # Module organization tests
-│   ├── test_exception_handling.py     # Exception handling tests
-│   └── test_game_integration.py       # Integration tests
-└── README.md                   # This file
-```
+To play the game, first clone the repository using the following command:
 
-### Step 3: Development Workflow
+git clone https://github.com/Fall-2025-COMP163/project-3-cdmullins-art.git
+cd project-3-cdmullins-art
 
-```bash
-# Work on one module at a time
-# Test your code frequently
+Ensure you have Python installed (version 3.x). You can then run the game by executing:
 
-# Commit and push to see test results
-git add .
-git commit -m "Implement character_manager module"
-git push origin main
+python main.py
 
-# Check GitHub for test results (green checkmarks = passed!, red xs = at least 1 failed test case. Click the checkmark or x and then "Details" to see what test cases passed/failed)
-```
+Upon launching, the game will prompt you to create a character by selecting a class (Warrior, Mage, Rogue, or Cleric). After character creation, you will be able to embark on quests, manage your inventory, and engage in combat with enemies. As you progress, you can complete quests, gain experience, and equip items that improve your character’s abilities. You may also save your progress as the game supports save/load functionality. If you wish to view your character’s status or inventory, there are commands built into the game that allow you to check your progress. Invalid commands or illegal actions will trigger exceptions and notify you of the error. To exit the game, simply follow the on-screen instructions for quitting or pressing the designated key. The game’s modular design allows for easy expansion of quests, items, and gameplay mechanics in future updates.
 
-## Core Requirements (60 Points)
-
-### Critical Constraint
-You may **only** use concepts covered through the **Exceptions and Modules** chapters. 
-
-### 🎨 Creativity and Customization
-
-This project encourages creativity! Here's what you can customize:
-
-**✅ FULLY CUSTOMIZABLE:**
-- **Character stats** - Adjust health, strength, magic for balance
-- **Enemy stats** - Make enemies easier or harder
-- **Special abilities** - Design unique abilities for each class
-- **Additional enemies** - Add your own enemy types beyond the required three
-- **Game mechanics** - Add status effects, combos, critical hits, etc.
-- **Quest rewards** - Adjust XP and gold amounts
-- **Item effects** - Create unique items with creative effects
-
-**⚠️ REQUIRED (for testing):**
-- **4 Character classes:** Warrior, Mage, Rogue, Cleric (names must match exactly)
-- **3 Enemy types:** "goblin", "orc", "dragon" (must exist, stats flexible)
-- **All module functions** - Must have the specified function signatures
-- **Exception handling** - Must raise appropriate exceptions
-
-**💡 CREATIVITY TIPS:**
-1. Start with required features working
-2. Add creative elements incrementally
-3. Test after each addition
-4. Be ready to explain your design choices in the interview
-5. Bonus interview points for thoughtful, balanced customization!
-
-**Example Creative Additions:**
-- Vampire enemy that heals when attacking
-- Warrior "Last Stand" ability that activates when health is low
-- Poison status effect that deals damage over time
-- Critical hit system based on character stats
-- Rare "legendary" weapons with special effects
-
-### Module 1: custom_exceptions.py (PROVIDED - 0 points to implement)
-
-**This module is provided complete.** It defines all custom exceptions you'll use throughout the project.
-
-### Module 2: game_data.py (10 points)
-
-### Module 3: character_manager.py (15 points)
-
-### Module 4: inventory_system.py (10 points)
-
-### Module 5: quest_handler.py (10 points)
-
-### Module 6: combat_system.py (10 points)
-
-### Module 7: main.py (5 points)
-
-## Automated Testing & Validation (60 Points)
-
-## Interview Component (40 Points)
-
-**Creativity Bonus** (up to 5 extra points on interview):
-- Added 2+ custom enemy types beyond required three
-- Designed unique and balanced special abilities
-- Implemented creative game mechanics (status effects, advanced combat, etc.)
-- Thoughtful stat balancing with clear reasoning
-
-**Note:** Creativity is encouraged, but functionality comes first! A working game with required features scores higher than a broken game with lots of extras.
-
-### Update README.md
-
-Document your project with:
-
-1. **Module Architecture:** Explain your module organization
-2. **Exception Strategy:** Describe when/why you raise specific exceptions
-3. **Design Choices:** Justify major decisions
-4. **AI Usage:** Detail what AI assistance you used
-5. **How to Play:** Instructions for running the game
-
-### What to Submit:
-
-1. **GitHub Repository:** Your completed multi-module project
-2. **Interview:** Complete 10-minute explanation session
-3. **README:** Updated documentation
-
-## Protected Files Warning
-
-⚠️ **IMPORTANT: Test Integrity**
-
-Test files are provided for your learning but are protected. Modifying test files constitutes academic dishonesty and will result in:
-
-- Automatic zero on the project
-- Academic integrity investigation
-
-You can view tests to understand requirements, but any modifications will be automatically detected.
